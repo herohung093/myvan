@@ -17,5 +17,5 @@ let firebaseConfig = {
   //firebase.analytics();
   const storage = firebase.storage();
   export {
-      storage, firebase as default
+      storage as default
   }

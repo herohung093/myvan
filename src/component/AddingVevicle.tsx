@@ -54,7 +54,7 @@ const AddingVehicle: React.SFC<{}> = props => {
   }
   const handleSubmit=()=>{
       
-    const uploadTask = storage.storage() //ref(`images/${stringInputs.numberPlate}`).put(image);
+    const uploadTask = storage.ref(`images/${stringInputs.numberPlate}`).put(image);
     console.log(uploadTask)
     
     
