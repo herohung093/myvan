@@ -11,25 +11,21 @@
     "@types/node": "^12.12.29",
     "@types/react": "^16.9.23",
     "@types/react-dom": "^16.9.5",
+    "@types/react-router-dom": "^5.1.3",
     "@types/styled-components": "^5.0.1",
-<<<<<<< HEAD
-    "bootstrap": "^4.4.1",
-=======
+    "axios": "^0.19.2",
     "babel-plugin-styled-components": "^1.10.7",
     "bootstrap": "^4.4.1",
     "firebase": "^7.10.0",
     "gatsby-plugin-styled-components": "^3.1.20",
->>>>>>> ffc7aec8829a685e571da8507bae4f7a37e90f09
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-dom": "^16.13.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "styled-components": "^5.0.1",
-<<<<<<< HEAD
     "typescript": "^3.8.3"
-=======
-    "typescript": "^3.7.5"
->>>>>>> ffc7aec8829a685e571da8507bae4f7a37e90f09
   },
   "scripts": {
     "start": "react-scripts start",

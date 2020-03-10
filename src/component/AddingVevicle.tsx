@@ -4,6 +4,7 @@ import { Form, Container, Col, Row } from "react-bootstrap";
 import { useState } from "react";
 import CarImage from "./CarImage";
 import storage from "../firebase/index";
+import axios from "../http/axios-vehicle";
 const Field = styled.div`
   margin-top: 10%;
   margin-bottom: 10px;
@@ -11,6 +12,12 @@ const Field = styled.div`
 `;
 const Button = styled.button`
   width: 50%;
+`;
+const Progress = styled.progress`
+  width: 190pt;
+  @media (min-width: 850px) {
+    width: 390pt;
+  }
 `;
 const AddingVehicle: React.SFC<{}> = props => {
   interface formsType {
@@ -21,6 +28,7 @@ const AddingVehicle: React.SFC<{}> = props => {
     brand: string;
     assessFee: string;
     ratePerHour: string;
+    status: string;
   }
 
   const initializeForms: formsType = {
@@ -30,11 +38,12 @@ const AddingVehicle: React.SFC<{}> = props => {
     description: "",
     brand: "",
     assessFee: "",
-    ratePerHour: ""
+    ratePerHour: "",
+    status: "Available"
   };
-  const [image, setImage] = useState<any>();
+  const [image, setImage] = useState<any>(null);
   const [stringInputs, setStringInputs] = useState<formsType>(initializeForms);
-
+  const [imageUploadProgress, setProgress] = useState<any>();
   const handleStringFormChange = (e: any) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -48,18 +57,36 @@ const AddingVehicle: React.SFC<{}> = props => {
     }
     setStringInputs({ ...stringInputs, [name]: value });
   };
-  const handleUploadImage=(imageData: any)=>{
-    //setImage(imageData)
-    
-  }
-  const handleSubmit=()=>{
-      
-    const uploadTask = storage.ref(`images/${stringInputs.numberPlate}`).put(image);
-    console.log(uploadTask)
-    
-    
-    
-  }
+  const handleUploadImage = (imageData: any) => {
+    setImage(imageData);
+  };
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const uploadTask = storage
+      .ref(`images/${stringInputs.numberPlate}`)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot: any) => {
+        // progress function ...
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
+      (error: any) => {
+        // Error function ...
+        console.log(error);
+      },
+      () => {
+        // show successful message
+      }
+    );
+    axios
+      .post("/vehicles.json", stringInputs)
+      .then((response: any) => console.log(response))
+      .catch((error: any) => console.log(error));
+  };
   return (
     <Container>
       <Row>
@@ -155,6 +182,15 @@ const AddingVehicle: React.SFC<{}> = props => {
         <Col xs={4}>
           {" "}
           <CarImage upLoadImage={handleUploadImage}></CarImage>
+          {image === null || imageUploadProgress === 100 ? (
+            ""
+          ) : (
+            <Progress
+              value={imageUploadProgress}
+              max="100"
+              className="progress"
+            />
+          )}
         </Col>
       </Row>
     </Container>

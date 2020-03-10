@@ -1,8 +1,8 @@
-import * as React from "react"
+import * as React from "react";
 import { useState } from "react";
-import styled from "styled-components"
-interface carImage{
-    upLoadImage(image: any): void;
+import styled from "styled-components";
+interface carImage {
+  upLoadImage(image: any): void;
 }
 const Img = styled.img`
   width: 190pt;
@@ -15,19 +15,22 @@ const Img = styled.img`
   }
 `;
 const Input = styled.input`
-margin-top: px;`
-const CarImage: React.FC<carImage>= props =>{
-    const initialUrl=""
-    const [url, setUrl] = useState<string>(initialUrl)
-    const handleChange= (e: any)=>{
-        setUrl(URL.createObjectURL(e.target.files[0]))
-        props.upLoadImage(e.target.files[0])
-    }
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+const CarImage: React.FC<carImage> = props => {
+  const initialUrl = "";
+  const [url, setUrl] = useState<string>(initialUrl);
+  const handleChange = (e: any) => {
+    setUrl(URL.createObjectURL(e.target.files[0]));
+    props.upLoadImage(e.target.files[0]);
+  };
 
-    return <div>
-        <Img src={url}></Img>
-        <Input type="file" onChange={handleChange}></Input>
-        
+  return (
+    <div>
+      <Img src={url}></Img>
+      <Input type="file" onChange={handleChange}></Input>
     </div>
-}
+  );
+};
 export default CarImage;
