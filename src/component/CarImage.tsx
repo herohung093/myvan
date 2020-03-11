@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import ImageHolder from "carImage.jpg"
 interface carImage {
   upLoadImage(image: any): void;
 }
@@ -19,7 +20,7 @@ const Input = styled.input`
   margin-bottom: 8px;
 `;
 const CarImage: React.FC<carImage> = props => {
-  const initialUrl = "";
+  const initialUrl = "/carImage.jpg";
   const [url, setUrl] = useState<string>(initialUrl);
   const handleChange = (e: any) => {
     setUrl(URL.createObjectURL(e.target.files[0]));
@@ -29,7 +30,7 @@ const CarImage: React.FC<carImage> = props => {
   return (
     <div>
       <Img src={url}></Img>
-      <Input type="file" onChange={handleChange}></Input>
+      <Input type="file" onChange={handleChange} required></Input>
     </div>
   );
 };

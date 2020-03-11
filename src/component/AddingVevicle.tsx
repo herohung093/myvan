@@ -5,6 +5,7 @@ import { useState } from "react";
 import CarImage from "./CarImage";
 import storage from "../firebase/index";
 import axios from "../http/axios-vehicle";
+import VehicleType from "../Types/VehicleType";
 const Field = styled.div`
   margin-top: 10%;
   margin-bottom: 10px;
@@ -19,19 +20,9 @@ const Progress = styled.progress`
     width: 390pt;
   }
 `;
-const AddingVehicle: React.SFC<{}> = props => {
-  interface formsType {
-    numberPlate: string;
-    type: string;
-    engine: string;
-    description: string;
-    brand: string;
-    assessFee: string;
-    ratePerHour: string;
-    status: string;
-  }
 
-  const initializeForms: formsType = {
+
+  const initializeForms: VehicleType = {
     numberPlate: "",
     type: "",
     engine: "",
@@ -41,9 +32,11 @@ const AddingVehicle: React.SFC<{}> = props => {
     ratePerHour: "",
     status: "Available"
   };
+  const AddingVehicle: React.FC<VehicleType> = props => {
   const [image, setImage] = useState<any>(null);
-  const [stringInputs, setStringInputs] = useState<formsType>(initializeForms);
+  const [stringInputs, setStringInputs] = useState<VehicleType>(initializeForms);
   const [imageUploadProgress, setProgress] = useState<any>();
+  const [uploadSuccess, setSuccess] = useState<boolean>(false);
   const handleStringFormChange = (e: any) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -62,7 +55,8 @@ const AddingVehicle: React.SFC<{}> = props => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const uploadTask = storage
+    
+    const uploadTask = storage.storage
       .ref(`images/${stringInputs.numberPlate}`)
       .put(image);
     uploadTask.on(
@@ -82,10 +76,15 @@ const AddingVehicle: React.SFC<{}> = props => {
         // show successful message
       }
     );
-    axios
-      .post("/vehicles.json", stringInputs)
-      .then((response: any) => console.log(response))
-      .catch((error: any) => console.log(error));
+
+      storage.database.ref("/vehicles/"+stringInputs.numberPlate).set(stringInputs).then((response: any) => {
+        // if (response.status === 200){
+        //     setStringInputs(initializeForms)
+        //     setSuccess(true)
+        // }
+        console.log(response)}
+        )
+    .catch((error: any) => console.log(error));
   };
   return (
     <Container>
@@ -182,7 +181,7 @@ const AddingVehicle: React.SFC<{}> = props => {
         <Col xs={4}>
           {" "}
           <CarImage upLoadImage={handleUploadImage}></CarImage>
-          {image === null || imageUploadProgress === 100 ? (
+          {!uploadSuccess && imageUploadProgress === 100 ? (
             ""
           ) : (
             <Progress
@@ -190,6 +189,10 @@ const AddingVehicle: React.SFC<{}> = props => {
               max="100"
               className="progress"
             />
+          )}
+          {uploadSuccess === true ? (
+            <h3>Vehicle has been added</h3>
+          ) : (""
           )}
         </Col>
       </Row>

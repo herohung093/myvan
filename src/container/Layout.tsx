@@ -2,7 +2,7 @@ import * as React from "react";
 import AddingVehicle from "../component/AddingVevicle";
 import styled from "styled-components";
 import VehicleList from "../component/VehicleList";
-import { Route } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 const Div = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -37,16 +37,31 @@ const Layout: React.FC<{}> = props => {
           <nav>
             <Ul>
               <Li>
-                <A href="/">Home</A>
+                <NavLink
+                  to="/"
+                  activeStyle={{
+                    color: "#fa923f",
+                    textDecoration: "underline"
+                  }}
+                  exact
+                >
+                  Home
+                </NavLink>
               </Li>
               <Li>
-                <A href="/AddVehicle">Add Vehicle</A>
+                <NavLink
+                  to="/AddVehicle"
+                  activeStyle={{
+                    color: "#fa923f",
+                    textDecoration: "underline"
+                  }}
+                >
+                  Add Vehicle
+                </NavLink>
               </Li>
             </Ul>
           </nav>
         </header>
-
-        {/* <AddingVehicle /> */}
       </Div>
 
       <Route path="/" exact component={VehicleList}></Route>
